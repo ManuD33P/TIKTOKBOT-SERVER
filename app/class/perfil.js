@@ -38,7 +38,7 @@ class Perfil{
         await this.live.connect();
         if(this.live) socket.emit('tiktokConected')
 
-
+    
         this.live.on(ControlEvent.DISCONNECTED, (state) => socket.emit('tiktokDisconnect'))
         this.live.on(WebcastEvent.CHAT, async(data)=>{
             //https://www.youtube.com/watch?v=BPidLpADlaM

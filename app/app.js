@@ -38,7 +38,9 @@ io.on('connection', (socket) => {
         
     })
 
-
+    socket.on('PING', ()=> {
+      socket.emit('PONG');
+    })
 })
 
 
