@@ -100,6 +100,7 @@ class Perfil{
 
         this.live.on(WebcastEvent.SHARE, async(data) => {
             try {
+                console.log(this.preferents)
                 if(!this.preferents.shared) return
                 const {nickname} = data.user;
                 const newAudio = new TSSAudio(`Gracias por compartir ${nickname}`);
