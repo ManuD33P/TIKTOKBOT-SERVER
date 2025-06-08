@@ -69,7 +69,7 @@ class Perfil{
                 this.likes.set(nickname,newLike);
             }
             this.eventQueue.enqueue(()=> {
-                currentLike = this.likes.get(nickname);
+                const currentLike = this.likes.get(nickname);
                 socket.emit('newComment',currentLike.binary)
             });
         });
