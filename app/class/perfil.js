@@ -81,7 +81,7 @@ class Perfil{
                 const newAudio = new TSSAudio(`Gracias por seguirme ${nickname}`);
                 await newAudio.getBinary();
                 this.eventQueue.enqueue(()=>{
-                    socket.emit('newFollow', newAudio);
+                    socket.emit('newComment', newAudio);
                 })
             } catch (error) {
                 console.log(error);
@@ -95,7 +95,7 @@ class Perfil{
                 const newAudio = new TSSAudio(`Gracias por compartir ${nickname}`);
                 await newAudio.getBinary();
                 this.eventQueue.enqueue(()=>{
-                    socket.emit('newShare', newAudio);
+                    socket.emit('newComment', newAudio);
                 })
             } catch (error) {
                 console.log(error)
