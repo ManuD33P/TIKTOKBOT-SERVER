@@ -1,13 +1,14 @@
 const { TikTokLiveConnection, WebcastEvent, ControlEvent,SignConfig } = require('tiktok-live-connector');
 const TSSAudio = require('./render-audio');
 const EventQueue = require('./event-queue');
-const fetchYouTubeVideos = require('./youtube')
+const fetchYouTubeVideos = require('./youtube');
+const Like = require('./like');
 class Perfil{
     constructor({username,interval = 10000}){
         this.username = username;
         this.messages = [];
         this.eventQueue = new EventQueue(interval);
-        this.lastLike = null;
+        this.likes = new Map();
     
         this.live = null;
     }
@@ -57,16 +58,49 @@ class Perfil{
         })
 
         this.live.on(WebcastEvent.LIKE, async (data) => {
-            if(this.lastLike === data.user.nickname) return 
-            const newAudio = new TSSAudio(`Gracias por tu like: ${data.user.nickname}`)
-            await newAudio.getBinary();
+            const {nickname} = data.user;
+            if(this.likes.has(nickname)){
+                const lastLike = this.likes.get(nickname);
+                if(lastLike.getLastLike() < 40) return 
+            } else {
+                const newAudio = new TSSAudio(`Gracias por tu like: ${nickname}`)
+                await newAudio.getBinary();
+                const newLike = Like(nickname,newAudio)
+                this.likes.set(nickname,newLike);
+            }
             this.eventQueue.enqueue(()=> {
-                socket.emit('newComment',newAudio)
+                currentLike = this.likes.get(nickname);
+                socket.emit('newComment',currentLike.binary)
             });
-            this.lastLike = data.user.nickname;
         });
     
         
+        this.live.on(WebcastEvent.FOLLOW, async(data) => {
+            try {
+                const {nickname} = data.user;
+                const newAudio = new TSSAudio(`Gracias por seguirme ${nickname}`);
+                await newAudio.getBinary();
+                this.eventQueue.enqueue(()=>{
+                    socket.emit('newFollow', newAudio);
+                })
+            } catch (error) {
+                console.log(error);
+            }
+
+        })
+
+        this.live.on(WebcastEvent.SHARE, async(data) => {
+            try {
+                const {nickname} = data.user;
+                const newAudio = new TSSAudio(`Gracias por compartir ${nickname}`);
+                await newAudio.getBinary();
+                this.eventQueue.enqueue(()=>{
+                    socket.emit('newShare', newAudio);
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        })
     }
 
 }
