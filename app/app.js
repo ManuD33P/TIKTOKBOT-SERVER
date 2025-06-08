@@ -49,9 +49,10 @@ io.on('connection', (socket) => {
 
     socket.on('setPreferents', (preferents,username)=> {
         //aca para setear las preferencias del usuario.
+        console.log(preferents);
         if(!ListProfile.has(username)) return
         const perfil = ListProfile.get(username)
-        perfil.preferents = preferents
+        perfil.preferents = {...preferents}
     })
 
     socket.on('PING', ()=> {
