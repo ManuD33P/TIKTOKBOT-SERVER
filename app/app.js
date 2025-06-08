@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
 
     socket.on('setPreferents', (preferents)=> {
         //aca para setear las preferencias del usuario.
-
+        console.log(preferents)
     })
 
     socket.on('PING', ()=> {
