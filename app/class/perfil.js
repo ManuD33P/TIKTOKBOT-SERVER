@@ -35,9 +35,12 @@ class Perfil{
 
     async conected(socket){
         if(!this.live) return false;
-
-        await this.live.connect();
-        if(this.live) socket.emit('tiktokConected')
+        try {
+            await this.live.connect();
+            if(this.live) socket.emit('tiktokConected')
+        } catch (error) {
+            console.log(error)
+        }
 
     
         this.live.on(ControlEvent.DISCONNECTED, (state) => socket.emit('tiktokDisconnect'))
