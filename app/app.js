@@ -14,12 +14,12 @@ let currentPerfil = null;
 
 const io = new Server(httpServer, {
     cors: {
-      origin: "https://tiktokbot-blond.vercel.app/", // El cliente que permites
+      origin: "https://tiktokbot-blond.vercel.app", // El cliente que permites
       methods: ["GET", "POST"], // Métodos HTTP permitidos
     },
   });
 const corsOptions = {
-    origin: "*", // Asegúrate de que este origen coincida con el de tu aplicación cliente
+    origin: "https://tiktokbot-blond.vercel.app", // Asegúrate de que este origen coincida con el de tu aplicación cliente
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Métodos HTTP permitidos
 }
 
