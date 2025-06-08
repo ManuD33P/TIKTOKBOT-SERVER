@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express();
 const httpServer = createServer(app);
 const Perfil = require('./class/perfil');
-
+const ListProfile = new Map();
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://tiktokbot-blond.vercel.app");
@@ -39,14 +39,19 @@ io.on('connection', (socket) => {
           const newPerfil = new Perfil({username});
           newPerfil.setLive();
           newPerfil.conected(socket);
+
+          // --> Hacer de mejor manera
+          ListProfile.set(username,newPerfil);
         } catch (error) {
             console.log(error)
         }
     })
 
-    socket.on('setPreferents', (preferents)=> {
+    socket.on('setPreferents', (preferents,username)=> {
         //aca para setear las preferencias del usuario.
-        console.log(preferents)
+        if(!ListProfile.has(username)) return
+        const perfil = ListProfile.get(username)
+        perfil.preferents = preferents
     })
 
     socket.on('PING', ()=> {

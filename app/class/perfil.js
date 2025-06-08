@@ -9,8 +9,12 @@ class Perfil{
         this.messages = [];
         this.eventQueue = new EventQueue(interval);
         this.likes = new Map();
-    
         this.live = null;
+        this.preferents = {
+            follow:true,
+            shared:true,
+            like:true,
+        }
     }
 
 
@@ -61,6 +65,7 @@ class Perfil{
         })
 
         this.live.on(WebcastEvent.LIKE, async (data) => {
+            if(!this.preferents.like) return
             const {nickname} = data.user;
             if(this.likes.has(nickname)){
                 const lastLike = this.likes.get(nickname);
@@ -80,6 +85,7 @@ class Perfil{
         
         this.live.on(WebcastEvent.FOLLOW, async(data) => {
             try {
+                if(!this.preferents.follow) return
                 const {nickname} = data.user;
                 const newAudio = new TSSAudio(`Gracias por seguirme ${nickname}`);
                 await newAudio.getBinary();
@@ -94,6 +100,7 @@ class Perfil{
 
         this.live.on(WebcastEvent.SHARE, async(data) => {
             try {
+                if(!this.preferents.shared) return
                 const {nickname} = data.user;
                 const newAudio = new TSSAudio(`Gracias por compartir ${nickname}`);
                 await newAudio.getBinary();
