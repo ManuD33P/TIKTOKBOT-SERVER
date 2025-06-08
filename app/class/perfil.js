@@ -65,7 +65,7 @@ class Perfil{
             } else {
                 const newAudio = new TSSAudio(`Gracias por tu like: ${nickname}`)
                 await newAudio.getBinary();
-                const newLike = Like(nickname,newAudio)
+                const newLike = new Like(nickname,newAudio)
                 this.likes.set(nickname,newLike);
             }
             this.eventQueue.enqueue(()=> {
