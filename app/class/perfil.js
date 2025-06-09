@@ -102,8 +102,8 @@ class Perfil{
         this.live.on(WebcastEvent.SHARE, async(data) => {
             try {
                 if(!this.preferents.shared) return
-                if(this.share.has(nickname)) return;
                 const {nickname} = data.user;
+                if(this.share.has(nickname)) return;
                 const newAudio = new TSSAudio(`Gracias por compartir ${nickname}`);
                 await newAudio.getBinary();
                 this.eventQueue.enqueue(()=>{
