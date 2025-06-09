@@ -47,11 +47,11 @@ io.on('connection', (socket) => {
         }
     })
 
-    socket.on('setPreferents', (preferents,username)=> {
+    socket.on('setPreferents', (preferents)=> {
         //aca para setear las preferencias del usuario.
         console.log(preferents);
-        if(!ListProfile.has(username)) return
-        const perfil = ListProfile.get(username)
+        if(!ListProfile.has(preferents.username)) return
+        const perfil = ListProfile.get(preferents.username)
         perfil.preferents = {...preferents}
     })
 
