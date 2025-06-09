@@ -9,6 +9,7 @@ class Perfil{
         this.messages = [];
         this.eventQueue = new EventQueue(interval);
         this.likes = new Map();
+        this.share = new Map();
         this.live = null;
         this.preferents = {
             follow:true,
@@ -100,14 +101,15 @@ class Perfil{
 
         this.live.on(WebcastEvent.SHARE, async(data) => {
             try {
-                console.log(this.preferents)
                 if(!this.preferents.shared) return
+                if(this.share.has(nickname)) return;
                 const {nickname} = data.user;
                 const newAudio = new TSSAudio(`Gracias por compartir ${nickname}`);
                 await newAudio.getBinary();
                 this.eventQueue.enqueue(()=>{
                     socket.emit('newComment', newAudio);
                 })
+                this.share.set(nickname,newAudio);
             } catch (error) {
                 console.log(error)
             }
