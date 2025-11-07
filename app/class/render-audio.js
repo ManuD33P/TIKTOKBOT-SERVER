@@ -10,7 +10,10 @@ class TSSAudio {
     async fetchProxies() {
         try {
             const response = await axios.get("https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=https&proxy_format=ipport&format=json");
-            const proxies = response.data.proxies.map(p => p.proxy);
+            const proxies = response.data.proxies.
+                filter(p => p.protocol === 'http').
+                map(p => p.proxy)
+            
             if (proxies.length === 0) throw new Error("No se encontraron proxies");
             return proxies;
         } catch (error) {
@@ -35,7 +38,7 @@ class TSSAudio {
                     const audiobs64 = await googleTSS.getAudioBase64(this.text, {
                         lang: "es",
                         slow: false,
-                        requestOptions: { proxy: `http://${host}:${port}` }
+                        requestOptions: { proxy: `https://${host}:${port}` }
                     });
 
                     if (!audiobs64) throw new Error("Error al obtener audio.");
