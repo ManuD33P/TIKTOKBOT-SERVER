@@ -38,7 +38,6 @@ class TSSAudio {
                     const audiobs64 = await googleTSS.getAudioBase64(this.text, {
                         lang: "es",
                         slow: false,
-                        requestOptions: { proxy: `https://${host}:${port}` }
                     });
 
                     if (!audiobs64) throw new Error("Error al obtener audio.");
